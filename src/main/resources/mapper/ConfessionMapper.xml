@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.biaob.mapper.ConfessionMapper" >
+
+    <resultMap id="BaseResultMap" type="com.biaob.bean.Confession" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="gender" property="gender" jdbcType="INTEGER" />
+        <result column="openId" property="openid" jdbcType="VARCHAR" />
+        <result column="fromUser" property="fromuser" jdbcType="VARCHAR" />
+        <result column="toUser" property="touser" jdbcType="VARCHAR" />
+        <result column="photo" property="photo" jdbcType="VARCHAR" />
+        <result column="content" property="content" jdbcType="LONGVARCHAR" />
+        <result column="display" property="display" jdbcType="INTEGER" />
+        <result column="plnum" property="plnum" jdbcType="VARCHAR" />
+        <result column="headImageUrl" property="headimageurl" jdbcType="VARCHAR" />
+        <result column="datetime" property="datetime" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, gender, openId, fromUser, toUser, photo, content, display, plnum, headImageUrl, 
+        datetime
+    </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select 
+        <include refid="Base_Column_List" />
+        from confession 
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <!-- 查询所有 -->
+    <select id="findAllConfession" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select 
+        <include refid="Base_Column_List" />
+        from confession ORDER BY DATETIME DESC limit #{pageStart},#{pageSize}
+    </select>
+    
+    <!-- 查询总数 -->
+    <select id="countItem" resultType="java.lang.Integer"  >
+        select count(1) from confession
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from confession
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert"  useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.biaob.bean.Confession" >
+        insert into confession (id, gender, openId, 
+            fromUser, toUser, photo, 
+            content, display, plnum, 
+            headImageUrl, datetime)
+        values (#{id,jdbcType=INTEGER}, #{gender,jdbcType=INTEGER}, #{openid,jdbcType=VARCHAR}, 
+            #{fromuser,jdbcType=VARCHAR}, #{touser,jdbcType=VARCHAR}, #{photo,jdbcType=VARCHAR}, 
+            #{content,jdbcType=LONGVARCHAR}, #{display,jdbcType=INTEGER}, #{plnum,jdbcType=VARCHAR}, 
+            #{headimageurl,jdbcType=VARCHAR}, now())
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.biaob.bean.Confession" >
+        insert into confession
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="gender != null" >
+                gender,
+            </if>
+            <if test="openid != null" >
+                openId,
+            </if>
+            <if test="fromuser != null" >
+                fromUser,
+            </if>
+            <if test="touser != null" >
+                toUser,
+            </if>
+            <if test="photo != null" >
+                photo,
+            </if>
+            <if test="content != null" >
+                content,
+            </if>
+            <if test="display != null" >
+                display,
+            </if>
+            <if test="plnum != null" >
+                plnum,
+            </if>
+            <if test="headimageurl != null" >
+                headImageUrl,
+            </if>
+            <if test="datetime != null" >
+                datetime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="gender != null" >
+                #{gender,jdbcType=INTEGER},
+            </if>
+            <if test="openid != null" >
+                #{openid,jdbcType=VARCHAR},
+            </if>
+            <if test="fromuser != null" >
+                #{fromuser,jdbcType=VARCHAR},
+            </if>
+            <if test="touser != null" >
+                #{touser,jdbcType=VARCHAR},
+            </if>
+            <if test="photo != null" >
+                #{photo,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null" >
+                #{content,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="display != null" >
+                #{display,jdbcType=INTEGER},
+            </if>
+            <if test="plnum != null" >
+                #{plnum,jdbcType=VARCHAR},
+            </if>
+            <if test="headimageurl != null" >
+                #{headimageurl,jdbcType=VARCHAR},
+            </if>
+            <if test="datetime != null" >
+                #{datetime,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.biaob.bean.Confession" >
+        update confession
+        <set >
+            <if test="gender != null" >
+                gender = #{gender,jdbcType=INTEGER},
+            </if>
+            <if test="openid != null" >
+                openId = #{openid,jdbcType=VARCHAR},
+            </if>
+            <if test="fromuser != null" >
+                fromUser = #{fromuser,jdbcType=VARCHAR},
+            </if>
+            <if test="touser != null" >
+                toUser = #{touser,jdbcType=VARCHAR},
+            </if>
+            <if test="photo != null" >
+                photo = #{photo,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null" >
+                content = #{content,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="display != null" >
+                display = #{display,jdbcType=INTEGER},
+            </if>
+            <if test="plnum != null" >
+                plnum = #{plnum,jdbcType=VARCHAR},
+            </if>
+            <if test="headimageurl != null" >
+                headImageUrl = #{headimageurl,jdbcType=VARCHAR},
+            </if>
+            <if test="datetime != null" >
+                datetime = #{datetime,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.biaob.bean.Confession" >
+        update confession
+        set gender = #{gender,jdbcType=INTEGER},
+            openId = #{openid,jdbcType=VARCHAR},
+            fromUser = #{fromuser,jdbcType=VARCHAR},
+            toUser = #{touser,jdbcType=VARCHAR},
+            photo = #{photo,jdbcType=VARCHAR},
+            content = #{content,jdbcType=LONGVARCHAR},
+            display = #{display,jdbcType=INTEGER},
+            plnum = #{plnum,jdbcType=VARCHAR},
+            headImageUrl = #{headimageurl,jdbcType=VARCHAR},
+            datetime = #{datetime,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

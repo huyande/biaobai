@@ -1,0 +1,56 @@
+server:
+  port: 80
+
+spring:
+    datasource:
+        name: test
+        url: jdbc:mysql://127.0.0.1:3306/biaob
+        username: root
+        password: 123456
+        # 使用druid数据源
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+
+## 该配置节点为独立的节点，有很多同学容易将这个配置放在spring的节点下，导致配置无法被识别
+mybatis:
+  mapper-locations: classpath:mapper/*.xml  #注意：一定要对应mapper映射xml文件的所在路径
+  type-aliases-package: com.biaob.bean  # 注意：对应实体类的路径
+
+#pagehelper分页插件
+#pagehelper:
+#    helperDialect: mysql
+#     reasonable: true
+#     supportMethodsArguments: true
+#     params: count:countSql
+    
+    
+#配置SQL语句打印到控制台
+logging:
+  level:
+    com:
+      biaob:
+        mapper: debug
+        
+        
+        
+#配置微信小程序 appid和secret
+wx:
+  appid: wx022ee93e7aaf7e2e
+  secret: 3206b8c1ffac6aae3df15770d450ed0c
+  grantType: authorization_code
+  sessionHost: https://api.weixin.qq.com/sns/jscode2session
+  
+#配置httpclient
+#最大连接数
+http: 
+     maxTotal : 100
+#并发数
+     defaultMaxPerRoute : 20
+#创建连接的最长时间
+     connectTimeout: 1000
+#从连接池中获取到连接的最长时间
+     connectionRequestTimeout: 500
+#数据传输的最长时间
+     socketTimeout: 10000
+#提交请求前测试连接是否可用
+     staleConnectionCheckEnabled: true
