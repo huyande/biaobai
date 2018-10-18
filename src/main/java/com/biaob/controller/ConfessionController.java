@@ -1,9 +1,16 @@
 package com.biaob.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.http.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +24,7 @@ import com.biaob.bean.Wxuserinfo;
 import com.biaob.service.ConfessionService;
 import com.biaob.service.UserbrowsingService;
 import com.biaob.service.WxUserInfoService;
+import com.biaob.utils.FileUtil;
 import com.google.gson.Gson;
 
 /**
@@ -76,15 +84,51 @@ public class ConfessionController {
 	 * @param confession
 	 */
 	@RequestMapping(value="/upload/pid/{aid}")
-	public String upload(MultipartFile files,@PathVariable("aid")String aid) {
-		System.err.println("=====ssssss======");
-		return "ff";
+	public String upload(MultipartFile files,@PathVariable("aid")Integer aid) {
+		try {
+			//创建文件 
+			String path ="D:/demo/download/";
+			if(!FileUtil.isExist(path)) {
+				FileUtil.makeDir(path);
+			}
+			//保存文件
+			files.transferTo(new File(path+files.getOriginalFilename()));
+			String filename = files.getOriginalFilename();
+			//根据aid 查询信息 
+			Confession confession= confessionService.findById(aid);
+			confession.setPhoto(filename);
+			confessionService.updataConfession(confession);
+			return "true";
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "false";
+		}
 	}
 	
 	
-	
-	
-	
+	/**
+	 * 显示图片 
+	 * getFeedBackPicture.do?picName=
+	 * @return
+	 */
+	@RequestMapping(value="/viewPhoto/{photopath}")
+	public void getFeedBackPicture(HttpServletResponse response,@PathVariable("photopath")String photopath) throws Exception{
+		String realPath="D:/demo/download/"+photopath;
+		FileInputStream inputStream = new FileInputStream(realPath);
+		int i = inputStream.available();
+		//byte数组用于存放图片字节数据
+		byte[] buff = new byte[i];
+		inputStream.read(buff);
+		//记得关闭输入流
+		inputStream.close();
+		//设置发送到客户端的响应内容类型
+		response.setContentType("image/*");
+		OutputStream out = response.getOutputStream();
+		out.write(buff);
+		//关闭响应输出流
+		out.close();
+	}
 	/**
 	 * 	增加该信息访客信息 暂不使用 
 	 * 	方法一实现

@@ -15,4 +15,7 @@ public interface ConfessionService {
 
 	void add(Confession confession);
 
+	void updataConfession(Confession confession);
+
+
 }

@@ -47,4 +47,9 @@ public class ConfessionServiceImpl implements ConfessionService{
 		confessionMapper.insert(confession);
 	}
 
+	@Override
+	public void updataConfession(Confession confession) {
+		confessionMapper.updateByPrimaryKey(confession);
+	}
+
 }
